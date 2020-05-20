@@ -6,7 +6,7 @@
 
   License : MIT
 
-  Version : 1.0b
+  Version : 1.1b
 
   This is a beta version, many things still needs to be improved.
 

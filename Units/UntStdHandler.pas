@@ -125,9 +125,10 @@ var ASockAddrIn     : TSockAddrIn;
     ABytesAvailable : Cardinal;
     pRecvBuffer     : Pointer;
     ATotalRecvdSize : Cardinal;
-    AData           : AnsiString;
     AOnConnectEvent : THandle;
     AMessage        : tagMsg;
+    AConsoleOutput  : THandle;
+    ABytesWritten   : Cardinal;
 begin
   try
     {
@@ -181,6 +182,11 @@ begin
 
         SetEvent(AOnConnectEvent);
 
+        AConsoleOutput := GetStdHandle(STD_OUTPUT_HANDLE);
+        if (AConsoleOutput = 0) or (AConsoleOutput = INVALID_HANDLE_VALUE) then
+          Exit();
+        ///
+
         while NOT Terminated do begin
           if NOT IsMutexAssigned(LSTDOUT_MUTEX_NAME) then
             break;
@@ -233,9 +239,7 @@ begin
               If we received some data, we display to our console
             }
             if (ATotalRecvdSize > 0) then begin
-              SetString(AData, PAnsiChar(pRecvBuffer), ATotalRecvdSize);
-
-              Write(AData);
+              WriteFile(AConsoleOutput, PByte(pRecvBuffer)^, ATotalRecvdSize, ABytesWritten, nil);
             end;
           finally
             if (ATotalRecvdSize > 0) then
