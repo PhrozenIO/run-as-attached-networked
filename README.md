@@ -6,6 +6,17 @@ RunAsAttached is a program to run a console as another user and keep new console
 
 [![Alt text](http://i3.ytimg.com/vi/nT8ub6Q1R0c/maxresdefault.jpg)](https://www.youtube.com/watch?v=nT8ub6Q1R0c)
 
+## Changelogs
+
+### 18/05/2020
+
+- First release
+
+### 20/05/2020
+
+- Major bug fixed when using Netcat / Telnet etc..
+- Stability improved
+
 ## Description
 
 Unlike on UNIX based systems, on Microsoft Windows you can't run command as another user without spawning a new process then a new console window.
