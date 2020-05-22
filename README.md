@@ -1,3 +1,11 @@
+# Local version
+
+You can find another variant of this program which doesn't requires Networking function and also compatible with any application like Netcat, Telnet etc... here : https://github.com/DarkCoderSc/run-as-attached-local
+
+RunAsAttached (Local) version is more stable.
+
+The goal of Networked version was to demonstrate inter-process communication using Socket programming.
+
 # RunAsAttached (Networked) - 32bit / 64bit
 
 RunAsAttached is a program to run a console as another user and keep new console attached to caller console. Support reverse shell mode (Ex: Netcat)
